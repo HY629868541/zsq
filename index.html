@@ -358,8 +358,11 @@
   sky.appendChild(frag);
 })();
 
-/* ── 三击彩蛋 ── */
+/* ── 三击彩蛋（当前已关闭；把 ENABLE_EGG 改成 true 即可恢复） ── */
 (function () {
+  var ENABLE_EGG = false;
+  if (!ENABLE_EGG) return;
+
   // 想换成具体某首歌，把下面这行换成歌曲链接，例如：
   // https://music.163.com/#/song?id=1901371647
   var MUSIC_URL = "https://music.163.com/#/search/m/?s=%E6%88%91%E5%96%9C%E6%AC%A2%E4%BD%A0&type=1";
