@@ -175,6 +175,102 @@
     animation:fadeUp 1s ease 1.6s forwards;
   }
 
+  /* ── 隐藏彩蛋页 ── */
+  .secret{
+    position:fixed;inset:0;z-index:30;
+    display:flex;align-items:center;justify-content:center;
+    background:
+      radial-gradient(ellipse at 50% 32%, rgba(140,25,70,.72) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 105%, rgba(60,12,80,.55) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 50%, #14060f 0%, #06030a 75%);
+    opacity:0;pointer-events:none;
+    transition:opacity .9s ease;
+  }
+  .secret.on{opacity:1;pointer-events:auto}
+
+  .secret .grain{
+    position:absolute;inset:0;pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.16) 1px, transparent 1px);
+    background-size:3px 3px;opacity:.25;
+    mask-image:radial-gradient(ellipse at center, #000 20%, transparent 70%);
+    -webkit-mask-image:radial-gradient(ellipse at center, #000 20%, transparent 70%);
+  }
+
+  .secret .halo{
+    position:absolute;
+    width:min(78vw,420px);height:min(78vw,420px);
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,95,143,.22) 0%, transparent 62%);
+    filter:blur(10px);
+    animation:haloPulse 4s ease-in-out infinite;
+  }
+  @keyframes haloPulse{
+    0%,100%{transform:scale(1);opacity:.8}
+    50%{transform:scale(1.12);opacity:1}
+  }
+
+  .secret .inner{
+    position:relative;z-index:2;text-align:center;padding:0 26px;
+    opacity:0;transform:translateY(26px);
+    transition:opacity 1s cubic-bezier(.22,1,.36,1) .35s, transform 1s cubic-bezier(.22,1,.36,1) .35s;
+  }
+  .secret.on .inner{opacity:1;transform:none}
+
+  .s-name{
+    font-size:clamp(52px,16vw,120px);
+    font-weight:800;
+    line-height:1.1;
+    letter-spacing:.12em;
+    text-indent:.12em;
+    background:linear-gradient(115deg,#ff5f8f 0%,#ffb3c8 32%,#fff0f4 52%,#ffb3c8 72%,#ff5f8f 100%);
+    background-size:260% 100%;
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 30px rgba(255,95,143,.45));
+    animation:sFlow 7s linear infinite;
+  }
+  @keyframes sFlow{to{background-position:260% 0}}
+
+  .s-text{
+    margin-top:26px;
+    font-size:clamp(20px,6.4vw,38px);
+    font-weight:500;
+    letter-spacing:.34em;
+    text-indent:.34em;
+    color:#ffe3ec;
+    text-shadow:0 0 22px rgba(255,95,143,.5);
+    opacity:0;
+    animation:fadeUp 1s ease 1.1s forwards;
+  }
+
+  .s-heart{
+    margin-top:34px;
+    font-size:clamp(24px,7vw,40px);
+    color:#ff5f8f;
+    filter:drop-shadow(0 0 18px rgba(255,95,143,.7));
+    animation:heartBeat 1.5s ease-in-out infinite;
+  }
+  @keyframes heartBeat{
+    0%,100%{transform:scale(1)}
+    14%{transform:scale(1.22)}
+    28%{transform:scale(1)}
+    42%{transform:scale(1.16)}
+    56%{transform:scale(1)}
+  }
+
+  .s-tip{
+    position:absolute;
+    left:0;right:0;
+    bottom:calc(34px + env(safe-area-inset-bottom));
+    z-index:3;
+    text-align:center;
+    font-size:12px;
+    letter-spacing:.22em;
+    color:#95707f;
+    opacity:0;
+    animation:fadeUp 1s ease 1.5s forwards;
+  }
+  .s-tip a{color:#ff9dbb;text-decoration:none;border-bottom:1px solid rgba(255,157,187,.4)}
+
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:.01ms !important;animation-iteration-count:1 !important}
   }
@@ -205,6 +301,17 @@
 </main>
 
 <div class="foot">THE&nbsp;&nbsp;MEMORY&nbsp;&nbsp;OF&nbsp;&nbsp;THREE&nbsp;&nbsp;YEARS</div>
+
+<div class="secret" id="secret" aria-hidden="true">
+  <div class="grain"></div>
+  <div class="halo"></div>
+  <div class="inner">
+    <div class="s-name">张苏琪</div>
+    <div class="s-text">我喜欢你</div>
+    <div class="s-heart">❤</div>
+  </div>
+  <div class="s-tip" id="sTip">3 秒后为你打开网易云</div>
+</div>
 
 <script>
 (function () {
@@ -243,6 +350,47 @@
   }
 
   sky.appendChild(frag);
+})();
+
+/* ── 三击彩蛋 ── */
+(function () {
+  // 想换成具体某首歌，把下面这行换成歌曲链接，例如：
+  // https://music.163.com/#/song?id=1901371647
+  var MUSIC_URL = "https://music.163.com/#/search/m/?s=%E6%88%91%E5%96%9C%E6%AC%A2%E4%BD%A0&type=1";
+
+  var h1 = document.querySelector(".wrap h1");
+  var secret = document.getElementById("secret");
+  var tip = document.getElementById("sTip");
+  if (!h1 || !secret) return;
+
+  var taps = 0, last = 0, fired = false;
+
+  h1.addEventListener("click", function () {
+    var now = Date.now();
+    if (now - last > 700) taps = 0;
+    taps++;
+    last = now;
+    if (taps >= 3) { taps = 0; openSecret(); }
+  });
+
+  function openSecret() {
+    if (fired) return;
+    fired = true;
+    secret.classList.add("on");
+    secret.setAttribute("aria-hidden", "false");
+
+    var n = 3;
+    var iv = setInterval(function () {
+      n--;
+      if (n > 0) tip.textContent = n + " 秒后为你打开网易云";
+    }, 1000);
+
+    setTimeout(function () {
+      clearInterval(iv);
+      tip.innerHTML = '正在打开… <a href="' + MUSIC_URL + '">点此手动打开</a>';
+      window.location.href = MUSIC_URL;
+    }, 3000);
+  }
 })();
 </script>
 </body>
