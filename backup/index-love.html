@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我喜欢你</title>
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0b0b12;
+    background-image: radial-gradient(circle at 50% 40%, #1d1030 0%, #0b0b12 65%);
+    font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    color: #fff;
+    overflow: hidden;
+  }
+  .box {
+    text-align: center;
+    padding: 0 24px;
+    animation: fadein 1.6s ease both;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(40px, 14vw, 120px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    background: linear-gradient(90deg, #ff8fb1, #ffd6a5, #a5d8ff, #ff8fb1);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: flow 6s linear infinite;
+  }
+  p {
+    margin: 22px 0 0;
+    font-size: clamp(13px, 3.6vw, 18px);
+    color: #9a9aad;
+    letter-spacing: 0.32em;
+  }
+  .heart {
+    margin-top: 40px;
+    font-size: clamp(22px, 6vw, 34px);
+    animation: beat 1.4s ease-in-out infinite;
+  }
+  @keyframes flow {
+    to { background-position: 300% 0; }
+  }
+  @keyframes beat {
+    0%, 100% { transform: scale(1); opacity: .9; }
+    50% { transform: scale(1.18); opacity: 1; }
+  }
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="box">
+    <h1>我喜欢你</h1>
+    <p>只对你说</p>
+    <div class="heart">❤</div>
+  </div>
+</body>
+</html>
