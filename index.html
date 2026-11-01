@@ -2,69 +2,248 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>李昌宇</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07060d">
+<title>三年的回忆</title>
 <style>
-  html, body {
-    height: 100%;
-    margin: 0;
+  :root{
+    --pink:#ff8fb1;
+    --gold:#ffd6a5;
+    --blue:#a5d8ff;
+    --muted:#b9b4cc;
   }
-  body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #0b0b12;
-    background-image: radial-gradient(circle at 50% 40%, #1d1030 0%, #0b0b12 65%);
-    font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
-    color: #fff;
-    overflow: hidden;
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;margin:0}
+  body{
+    background:
+      radial-gradient(ellipse at 18% 12%, rgba(90,40,140,.55) 0%, transparent 48%),
+      radial-gradient(ellipse at 86% 82%, rgba(20,80,120,.45) 0%, transparent 46%),
+      radial-gradient(ellipse at 50% 50%, #150c25 0%, #07060d 72%);
+    color:#fff;
+    font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
   }
-  .box {
-    text-align: center;
-    padding: 0 24px;
-    animation: fadein 1.6s ease both;
+
+  /* ── 背景层 ── */
+  .sky{position:fixed;inset:0;pointer-events:none;z-index:0}
+  .star{
+    position:absolute;width:2px;height:2px;border-radius:50%;
+    background:#fff;
+    animation:twinkle var(--d,4s) ease-in-out infinite;
+    animation-delay:var(--delay,0s);
   }
-  h1 {
-    margin: 0;
-    font-size: clamp(40px, 14vw, 120px);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    background: linear-gradient(90deg, #ff8fb1, #ffd6a5, #a5d8ff, #ff8fb1);
-    background-size: 300% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: flow 6s linear infinite;
+  @keyframes twinkle{
+    0%,100%{opacity:.08;transform:scale(.7)}
+    50%{opacity:.85;transform:scale(1.15)}
   }
-  p {
-    margin: 22px 0 0;
-    font-size: clamp(13px, 3.6vw, 18px);
-    color: #9a9aad;
-    letter-spacing: 0.32em;
+
+  .glow{
+    position:absolute;border-radius:50%;filter:blur(60px);opacity:.35;
+    animation:drift 18s ease-in-out infinite alternate;
   }
-  .heart {
-    margin-top: 40px;
-    font-size: clamp(22px, 6vw, 34px);
-    animation: beat 1.4s ease-in-out infinite;
+  .glow.g1{width:280px;height:280px;background:#7b3fa0;top:-60px;left:-80px}
+  .glow.g2{width:320px;height:320px;background:#1f5b8a;bottom:-100px;right:-90px;animation-delay:-6s}
+  .glow.g3{width:200px;height:200px;background:#a0426e;top:45%;left:60%;animation-delay:-11s}
+  @keyframes drift{
+    from{transform:translate3d(0,0,0) scale(1)}
+    to{transform:translate3d(30px,-40px,0) scale(1.15)}
   }
-  @keyframes flow {
-    to { background-position: 300% 0; }
+
+  .particle{
+    position:absolute;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,214,165,.9),rgba(255,214,165,0) 70%);
+    animation:float var(--fd,14s) linear infinite;
+    animation-delay:var(--pdelay,0s);
+    opacity:0;
   }
-  @keyframes beat {
-    0%, 100% { transform: scale(1); opacity: .9; }
-    50% { transform: scale(1.18); opacity: 1; }
+  @keyframes float{
+    0%{transform:translate3d(0,0,0);opacity:0}
+    12%{opacity:.6}
+    88%{opacity:.6}
+    100%{transform:translate3d(var(--dx,20px),-115vh,0);opacity:0}
   }
-  @keyframes fadein {
-    from { opacity: 0; transform: translateY(14px); }
-    to { opacity: 1; transform: none; }
+
+  /* ── 内容 ── */
+  .wrap{
+    position:relative;z-index:2;
+    text-align:center;
+    padding:0 28px;
+    max-width:640px;
+  }
+
+  .year{
+    font-size:12px;
+    letter-spacing:.62em;
+    color:#8f8aa8;
+    margin-bottom:26px;
+    text-indent:.62em;
+    opacity:0;
+    animation:fadeUp .9s cubic-bezier(.22,1,.36,1) .15s forwards;
+  }
+
+  h1{
+    margin:0;
+    font-size:clamp(40px,12vw,90px);
+    font-weight:700;
+    line-height:1.15;
+    letter-spacing:.08em;
+    text-indent:.08em;
+    background:linear-gradient(110deg,#ff8fb1 0%,#ffd6a5 28%,#a5d8ff 55%,#e0b0ff 78%,#ff8fb1 100%);
+    background-size:280% 100%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    filter:drop-shadow(0 0 26px rgba(255,143,177,.22));
+    opacity:0;
+    animation:flow 9s linear infinite, fadeUp 1.2s cubic-bezier(.22,1,.36,1) .35s forwards;
+  }
+  @keyframes flow{to{background-position:280% 0}}
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(20px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  .divider{
+    display:flex;align-items:center;justify-content:center;
+    gap:12px;
+    margin:30px auto 26px;
+    opacity:0;
+    animation:fadeUp .9s ease .85s forwards;
+  }
+  .divider .line{
+    width:52px;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,214,165,.75));
+  }
+  .divider .line.r{
+    background:linear-gradient(90deg,rgba(255,214,165,.75),transparent);
+  }
+  .divider .diamond{
+    width:7px;height:7px;
+    border:1px solid rgba(255,214,165,.85);
+    transform:rotate(45deg);
+    animation:pulse 3.2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{transform:rotate(45deg) scale(1);opacity:.55}
+    50%{transform:rotate(45deg) scale(1.25);opacity:1}
+  }
+
+  .sub{
+    font-size:clamp(12px,3.5vw,15px);
+    color:var(--muted);
+    letter-spacing:.34em;
+    text-indent:.34em;
+    line-height:2;
+    opacity:0;
+    animation:fadeUp 1s ease 1.05s forwards;
+  }
+
+  .dots{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-top:38px;
+    opacity:0;
+    animation:fadeUp 1s ease 1.3s forwards;
+  }
+  .dot{
+    width:6px;height:6px;border-radius:50%;
+    animation:beat 2.6s ease-in-out infinite;
+  }
+  .dot:nth-child(1){background:var(--gold)}
+  .dot:nth-child(2){background:var(--pink);animation-delay:.35s}
+  .dot:nth-child(3){background:var(--blue);animation-delay:.7s}
+  @keyframes beat{
+    0%,100%{transform:scale(1);opacity:.35}
+    50%{transform:scale(1.55);opacity:1}
+  }
+
+  .foot{
+    position:fixed;
+    left:0;right:0;
+    bottom:calc(26px + env(safe-area-inset-bottom));
+    z-index:2;
+    text-align:center;
+    font-size:11px;
+    letter-spacing:.28em;
+    color:#5d5870;
+    opacity:0;
+    animation:fadeUp 1s ease 1.6s forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms !important;animation-iteration-count:1 !important}
   }
 </style>
 </head>
 <body>
-  <div class="box">
-    <h1>李昌宇</h1>
-    
-    <div class="heart">❤</div>
+
+<div class="sky" id="sky">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
+</div>
+
+<main class="wrap">
+  <div class="year">2023 &nbsp;—&nbsp; 2026</div>
+  <h1>三年的回忆</h1>
+  <div class="divider">
+    <span class="line"></span>
+    <span class="diamond"></span>
+    <span class="line r"></span>
   </div>
+  <div class="sub">走过的每一步<br>都算数</div>
+  <div class="dots">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+</main>
+
+<div class="foot">THE&nbsp;&nbsp;MEMORY&nbsp;&nbsp;OF&nbsp;&nbsp;THREE&nbsp;&nbsp;YEARS</div>
+
+<script>
+(function () {
+  var sky = document.getElementById('sky');
+  if (!sky) return;
+
+  var frag = document.createDocumentFragment();
+
+  // 星星
+  for (var i = 0; i < 70; i++) {
+    var s = document.createElement('span');
+    s.className = 'star';
+    s.style.left = (Math.random() * 100).toFixed(2) + '%';
+    s.style.top = (Math.random() * 100).toFixed(2) + '%';
+    var size = (Math.random() * 1.6 + 1).toFixed(2);
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.setProperty('--d', (Math.random() * 4 + 2.5).toFixed(2) + 's');
+    s.style.setProperty('--delay', (Math.random() * 5).toFixed(2) + 's');
+    frag.appendChild(s);
+  }
+
+  // 上浮光点
+  for (var j = 0; j < 16; j++) {
+    var p = document.createElement('span');
+    p.className = 'particle';
+    var d = (Math.random() * 3 + 3).toFixed(1);
+    p.style.width = d + 'px';
+    p.style.height = d + 'px';
+    p.style.left = (Math.random() * 100).toFixed(2) + '%';
+    p.style.bottom = '-10px';
+    p.style.setProperty('--fd', (Math.random() * 12 + 12).toFixed(1) + 's');
+    p.style.setProperty('--pdelay', (Math.random() * 14).toFixed(1) + 's');
+    p.style.setProperty('--dx', (Math.random() * 80 - 40).toFixed(0) + 'px');
+    frag.appendChild(p);
+  }
+
+  sky.appendChild(frag);
+})();
+</script>
 </body>
 </html>
