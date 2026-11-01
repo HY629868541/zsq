@@ -175,6 +175,12 @@
     animation:fadeUp 1s ease 1.6s forwards;
   }
 
+  /* 点击反馈 */
+  h1.tap{
+    filter:drop-shadow(0 0 46px rgba(255,143,177,.72));
+    transition:filter .12s ease;
+  }
+
   /* ── 隐藏彩蛋页 ── */
   .secret{
     position:fixed;inset:0;z-index:30;
@@ -359,19 +365,31 @@
   var MUSIC_URL = "https://music.163.com/#/search/m/?s=%E6%88%91%E5%96%9C%E6%AC%A2%E4%BD%A0&type=1";
 
   var h1 = document.querySelector(".wrap h1");
+  var tapArea = document.querySelector(".wrap") || h1;
   var secret = document.getElementById("secret");
   var tip = document.getElementById("sTip");
   if (!h1 || !secret) return;
 
-  var taps = 0, last = 0, fired = false;
+  var taps = 0, last = 0, fired = false, tapTimer = null;
 
-  h1.addEventListener("click", function () {
+  function bump() {
+    h1.classList.add("tap");
+    clearTimeout(tapTimer);
+    tapTimer = setTimeout(function () { h1.classList.remove("tap"); }, 140);
+  }
+
+  function onTap() {
+    if (fired) return;
     var now = Date.now();
-    if (now - last > 700) taps = 0;
+    if (now - last > 900) taps = 0;
     taps++;
     last = now;
+    bump();
     if (taps >= 3) { taps = 0; openSecret(); }
-  });
+  }
+
+  // 整个内容区都能点，不限于文字本身
+  tapArea.addEventListener("click", onTap);
 
   function openSecret() {
     if (fired) return;
